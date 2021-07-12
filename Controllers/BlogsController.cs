@@ -60,6 +60,8 @@ namespace HadesBlog.Controllers
         {
             if (ModelState.IsValid)
             {
+                blog.Created = DateTime.Now;
+
                 _context.Add(blog);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -100,6 +102,7 @@ namespace HadesBlog.Controllers
             {
                 try
                 {
+                    blog.Updated = DateTime.Now;
                     _context.Update(blog);
                     await _context.SaveChangesAsync();
                 }
