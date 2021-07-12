@@ -39,7 +39,8 @@ namespace HadesBlog.Models
         public IFormFile Image { get; set; }
 
         //Nav Prop
-        public virtual BlogUser Author { get; set; }
+        [Display(Name = "Author")]
+        public virtual BlogUser BlogUser { get; set; }
         public virtual ICollection<Post> Posts { get; set; } = new HashSet<Post>();
     }
 }
