@@ -32,7 +32,7 @@ namespace HadesBlog.Models
         [Display(Name = "Blog Image")]
         public byte[] ImageData { get; set; }
 
-        [Display(Name = "Imagee Type")]
+        [Display(Name = "Image Type")]
         public string ContentType { get; set; }
 
         [NotMapped]
