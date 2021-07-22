@@ -1,5 +1,6 @@
 using HadesBlog.Data;
 using HadesBlog.Models;
+using HadesBlog.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -41,6 +42,13 @@ namespace HadesBlog
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            //Custom DataService Class
+            services.AddScoped<DataService>();
+
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
