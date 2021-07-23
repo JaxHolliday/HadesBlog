@@ -1,6 +1,7 @@
 using HadesBlog.Data;
 using HadesBlog.Models;
 using HadesBlog.Services;
+using HadesBlog.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -46,7 +47,9 @@ namespace HadesBlog
             //Custom DataService Class
             services.AddScoped<DataService>();
 
-
+            //Register a preconfigured instance of the mail settings class
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddScoped<IBlogEmailSender, EmailService>();
 
 
         }

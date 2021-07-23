@@ -1,0 +1,13 @@
+﻿using Microsoft.AspNetCore.Identity.UI.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace HadesBlog.Services
+{
+    public interface IBlogEmailSender : IEmailSender
+    {
+        Task SendContactEmailAsnc(string emailFrom, string name, string subject, string htmlMessage);
+    }
+}
