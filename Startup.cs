@@ -51,6 +51,9 @@ namespace HadesBlog
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddScoped<IBlogEmailSender, EmailService>();
 
+            //Register ImageService
+            services.AddScoped<IImageService, ImageService>();
+
 
         }
 
