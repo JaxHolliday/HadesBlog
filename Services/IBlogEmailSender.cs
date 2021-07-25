@@ -8,6 +8,6 @@ namespace HadesBlog.Services
 {
     public interface IBlogEmailSender : IEmailSender
     {
-        Task SendContactEmailAsnc(string emailFrom, string name, string subject, string htmlMessage);
+        Task SendContactEmailAsync(string emailFrom, string name, string subject, string htmlMessage);
     }
 }
