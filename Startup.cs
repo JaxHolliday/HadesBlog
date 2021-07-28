@@ -54,6 +54,9 @@ namespace HadesBlog
             //Register ImageService
             services.AddScoped<IImageService, ImageService>();
 
+            //Register Slug Service
+            services.AddScoped<ISlugService, SlugService>();
+
 
         }
 
