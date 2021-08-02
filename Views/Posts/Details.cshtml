@@ -1,4 +1,6 @@
-﻿@model HadesBlog.Models.Post
+﻿@using HadesBlog.Services
+@inject IImageService imageService 
+@model HadesBlog.Models.Post
 
 @{
     ViewData["Title"] = "Details";
@@ -15,3 +17,4 @@
     </div>
 </article>
 
+@* Displaying Comments Related to post then image of author *@
