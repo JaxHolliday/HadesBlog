@@ -27,7 +27,7 @@ namespace HadesBlog.Models
         public string Abstract { get; set; }
 
         [Required]
-        [StringLength(1000, ErrorMessage = "The {0} must be at least {2} and at most {1} characters.", MinimumLength = 2)]
+        //[StringLength(1000, ErrorMessage = "The {0} must be at least {2} and at most {1} characters.", MinimumLength = 2)]
         public string Content { get; set; }
 
         [DataType(DataType.Date)]

@@ -77,22 +77,22 @@ namespace HadesBlog.Controllers
 
                 //Need to create slug and determine if it's unique
                 //Takees in post title to spit out slug
-                var slug = _slugService.UrlFriendly(post.Title);
-                if (_slugService.IsUnique(slug))
-                {
-                    ModelState.AddModelError("Title", "The Title you provided cannot be used as it results in a duplicate slug.");
-                    ViewData["TagValues"] = string.Join(",", tagValues);
-                    return View(post);
-                }
+                //var slug = _slugService.UrlFriendly(post.Title);
+                //if (_slugService.IsUnique(slug))
+                //{
+                //    ModelState.AddModelError("Title", "The Title you provided cannot be used as it results in a duplicate slug.");
+                //    ViewData["TagValues"] = string.Join(",", tagValues);
+                //    return View(post);
+                //}
 
-                post.Slug = slug;
+                //post.Slug = slug;
 
 
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
+            //ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
             return View(post);
         }
 
