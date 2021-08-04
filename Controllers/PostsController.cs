@@ -9,6 +9,7 @@ using HadesBlog.Data;
 using HadesBlog.Models;
 using HadesBlog.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace HadesBlog.Controllers
 {
@@ -17,12 +18,14 @@ namespace HadesBlog.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ISlugService _slugService;
         private readonly IImageService _imageService;
+        private readonly UserManager<BlogUser> _userManager;
 
-        public PostsController(ApplicationDbContext context, ISlugService slugService, IImageService imageService)
+        public PostsController(ApplicationDbContext context, ISlugService slugService, IImageService imageService, UserManager<BlogUser> userManager)
         {
             _context = context;
             _slugService = slugService;
             _imageService = imageService;
+            _userManager = userManager;
         }
 
         // GET: Posts
@@ -30,6 +33,19 @@ namespace HadesBlog.Controllers
         {
             var applicationDbContext = _context.Posts.Include(p => p.Blog).Include(p => p.BlogUser);
             return View(await applicationDbContext.ToListAsync());
+        }
+
+        //BlogPostsIndex
+        public async Task<IActionResult> BlogPostIndex(int? id)
+        {
+            if(id is null)
+            {
+                return NotFound();
+            }
+
+            var posts = _context.Posts.Where(p => p.BlogId == id).ToList();
+
+            return View("Index", posts);
         }
 
         // GET: Posts/Details/5
@@ -71,6 +87,9 @@ namespace HadesBlog.Controllers
             {
                 post.Created = DateTime.Now;
 
+                var authorId = _userManager.GetUserId(User);
+                post.BlogUserId = authorId;
+
                 //Use The _imageService to store the incoming user specified image
                 post.ImageData = await _imageService.EncodeImageAsync(post.Image);
                 post.ContentType = _imageService.ContentType(post.Image);
@@ -90,6 +109,22 @@ namespace HadesBlog.Controllers
 
                 _context.Add(post);
                 await _context.SaveChangesAsync();
+
+                //Tags: To-Do
+
+                //How do i loop over the incoming list of string?
+                //foreach (var tagText in tagValues)
+                //{
+                //    _context.Add(new Tag()
+                //    {
+                //        PostId = post.Id,
+                //        BlogUserId = authorId,
+                //        Text = tagText
+                //    });
+                //}
+
+                //await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             //ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
