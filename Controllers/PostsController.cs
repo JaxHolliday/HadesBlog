@@ -30,6 +30,33 @@ namespace HadesBlog.Controllers
             _userManager = userManager;
         }
 
+        public async Task<IActionResult> SearchIndex(int? page, string searchTerm)
+        {
+            ViewData["SearchTerm"] = searchTerm;
+
+            var pageNumber = page ?? 1;
+            var pageSize = 5;
+
+            var posts = _context.Posts.Where(p => p.ReadyStatus == ReadyStatus.ProductionReady).AsQueryable();
+            // if return not null then this will happen
+            if (searchTerm != null)
+            {
+                searchTerm = searchTerm.ToLower();
+
+                posts = posts.Where(
+                    p => p.Title.ToLower().Contains(searchTerm) ||
+                    p.Abstract.ToLower().Contains(searchTerm) ||
+                    p.Content.ToLower().Contains(searchTerm) ||
+                    p.Comments.Any(c => c.Body.ToLower().Contains(searchTerm) ||
+                                        c.ModeratedBody.ToLower().Contains(searchTerm) ||
+                                        c.BlogUser.FirstName.ToLower().Contains(searchTerm) ||
+                                        c.BlogUser.LastName.ToLower().Contains(searchTerm) ||
+                                        c.BlogUser.Email.ToLower().Contains(searchTerm)));                                                        
+            }
+            posts = posts.OrderByDescending(p => p.Created);
+            return View(await posts.ToPagedListAsync(pageNumber, pageSize));
+        }
+
         // GET: Posts
         public async Task<IActionResult> Index()
         {
@@ -115,25 +142,12 @@ namespace HadesBlog.Controllers
 
                 //post.Slug = slug;
 
+                //Detect Incoming Dupe Slugs 
 
                 _context.Add(post);
                 await _context.SaveChangesAsync();
 
-                //Tags: To-Do
-
-                //How do i loop over the incoming list of string?
-                //foreach (var tagText in tagValues)
-                //{
-                //    _context.Add(new Tag()
-                //    {
-                //        PostId = post.Id,
-                //        BlogUserId = authorId,
-                //        Text = tagText
-                //    });
-                //}
-
-                //await _context.SaveChangesAsync();
-
+                
                 return RedirectToAction(nameof(Index));
             }
             //ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
