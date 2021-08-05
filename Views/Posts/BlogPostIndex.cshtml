@@ -1,0 +1,78 @@
+﻿@using HadesBlog.Services
+@using HadesBlog.Models
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+
+@inject IImageService imageService
+@model IPagedList<HadesBlog.Models.Post>
+
+@{
+    ViewData["Title"] = "Blog Posts Index";
+}
+
+<h1>All Posts</h1>
+
+<p>
+    <a asp-action="Create">Create New Post</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Image
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Abstract
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src="@imageService.DecodeImage(item.ImageData, item.ContentType)" style="width: 400px; height:250px" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Abstract)
+                </td>
+
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<hr />
+
+<!--Add Paging Controls Here-->
+<div class="row">
+    <div class="col h3 d-flex justify-content-end mb-4">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    </div>
+</div>
+
+<div class="row">
+    <div class="col d-flex justify-content-end mb-4">                                    @* Passing blog ID and page *@                   
+        @Html.PagedListPager(Model, page => Url.Action("BlogPostIndex", new { id = Model.FirstOrDefault().BlogId, page = page }),
+         new PagedListRenderOptionsBase
+         {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+         })
+    </div>
+</div>

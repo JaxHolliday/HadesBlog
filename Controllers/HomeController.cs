@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace HadesBlog.Controllers
 {
@@ -26,13 +27,26 @@ namespace HadesBlog.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
-            var blogs = await _context.Blogs
-                .Include(b => b.BlogUser)
-                .ToListAsync();
+            var pageNumber = page ?? 1;
+            var pageSize = 6;
 
-            return View(blogs);
+            //Any() --> Returns boolean Value
+            //OrderByDescending() --> LINQ Clause to sort records from the DB on givven prop
+
+            //var blogs = _context.Blogs.Where(
+            //    b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
+            //    .OrderByDescending(b => b.Created)
+            //    .ToPagedListAsync(pageNumber, pageSize);
+
+            var blogs = _context.Blogs
+                .Include(b => b.BlogUser)
+                .OrderByDescending(b => b.Created)
+                .ToPagedListAsync(pageNumber, pageSize);
+
+            return View(await blogs);
+
         }
 
         public IActionResult About()
