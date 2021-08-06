@@ -132,17 +132,33 @@ namespace HadesBlog.Controllers
 
                 //Need to create slug and determine if it's unique
                 //Takees in post title to spit out slug
-                //var slug = _slugService.UrlFriendly(post.Title);
-                //if (_slugService.IsUnique(slug))
-                //{
-                //    ModelState.AddModelError("Title", "The Title you provided cannot be used as it results in a duplicate slug.");
-                //    ViewData["TagValues"] = string.Join(",", tagValues);
-                //    return View(post);
-                //}
+                var slug = _slugService.UrlFriendly(post.Title);
 
-                //post.Slug = slug;
+                //Creat variable to store whether an error has happened
+                var validationError = false;
+
+                if (string.IsNullOrEmpty(slug))
+                {
+                    validationError = true;
+                    ModelState.AddModelError("", "The Title you provided cannot be used as it results in a Empty slug.");
+                }
 
                 //Detect Incoming Dupe Slugs 
+                if (!_slugService.IsUnique(slug))
+                {
+                    validationError = true;
+                    ModelState.AddModelError("Title", "The Title you provided cannot be used as it results in a duplicate slug.");                    
+                }
+
+                if (validationError)
+                {
+                    ViewData["TagValues"] = string.Join(",", tagValues);
+                    return View(post);
+                }
+
+                post.Slug = slug;
+
+
 
                 _context.Add(post);
                 await _context.SaveChangesAsync();
@@ -194,6 +210,23 @@ namespace HadesBlog.Controllers
                     newPost.Abstract = post.Abstract;
                     newPost.Content = post.Content;
                     newPost.ReadyStatus = post.ReadyStatus;
+
+                    var newSlug = _slugService.UrlFriendly(post.Title);
+                    //Comparing new slug vs old 
+                    if(newSlug != newPost.Slug)
+                    {
+                        if (_slugService.IsUnique(newSlug))
+                        {
+                            newPost.Title = post.Title;
+                            newPost.Slug = post.Slug;
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Title", "This Title cannot be used as it results in a duplicate slug");
+                            ViewData["TagValues"] = string.Join(",", post.Tags.Select(t => t.Text));
+                            return View(post);
+                        }
+                    }
 
                     if(newImage is not null)
                     {
