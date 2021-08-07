@@ -84,17 +84,25 @@ namespace HadesBlog.Controllers
             return View(posts);
         }
 
+        //public async Task<IActionResult> Details(int? id) = original
+
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            //if (string.IsNullOrEmpty(slug))
+            //{
+            //    return NotFound();
+            //}
+
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
 
             var post = await _context.Posts
                 .Include(p => p.Blog)
                 .Include(p => p.BlogUser)
+                .Include(p => p.Tags)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (post == null)
             {
@@ -158,6 +166,16 @@ namespace HadesBlog.Controllers
 
                 post.Slug = slug;
 
+                //How do i loop over the incoming list of string
+                //foreach(var tagText in tagValues)
+                //{
+                //    _context.Add(new Tag()
+                //    {
+                //        PostId = post.Id,
+                //        BlogUserId = authorId,
+                //        Text = tagText
+                //    });
+                //}
 
 
                 _context.Add(post);
