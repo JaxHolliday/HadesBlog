@@ -196,12 +196,16 @@ namespace HadesBlog.Controllers
                 return NotFound();
             }
 
-            var post = await _context.Posts.FindAsync(id);
+            //Posts with tags along with it 
+            var post = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == id);
+
+            //var post = await _context.Posts.FindAsync(id);
             if (post == null)
             {
                 return NotFound();
             }
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name", post.BlogId);
+            ViewData["TagValues"] = string.Join(",", post.Tags.Select(t => t.Text));
             return View(post);
         }
 
@@ -210,7 +214,7 @@ namespace HadesBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile newImage)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile newImage, List<string> tagValues)
         {
             if (id != post.Id)
             {
@@ -221,7 +225,9 @@ namespace HadesBlog.Controllers
             {
                 try
                 {
-                    var newPost = await _context.Posts.FindAsync(post.Id);
+                    var newPost = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == post.Id);
+
+                    //var newPost = await _context.Posts.FindAsync(post.Id);
 
                     newPost.Updated = DateTime.Now;
                     newPost.Title = post.Title;
@@ -251,6 +257,11 @@ namespace HadesBlog.Controllers
                         post.ImageData = await _imageService.EncodeImageAsync(newImage);
                         post.ContentType = _imageService.ContentType(newImage);
                     }
+
+                    //Remove all tags previously associated with post
+                    _context.Tags.RemoveRange(newPost.Tags);
+
+
 
                     //_context.Update(post);
                     await _context.SaveChangesAsync();
