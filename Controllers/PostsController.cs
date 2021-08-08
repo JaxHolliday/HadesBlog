@@ -261,7 +261,16 @@ namespace HadesBlog.Controllers
                     //Remove all tags previously associated with post
                     _context.Tags.RemoveRange(newPost.Tags);
 
-
+                    //Addd new tags from edit form
+                    //foreach(var tagText in tagValues)
+                    //{
+                    //    _context.Add(new Tag()
+                    //    {
+                    //        PostId = post.Id,
+                    //        BlogUserId = newPost.BlogUserId,  //-->Issue with id
+                    //        Text = tagText
+                    //    });
+                    //}
 
                     //_context.Update(post);
                     await _context.SaveChangesAsync();
