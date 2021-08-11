@@ -46,6 +46,7 @@ namespace HadesBlog
 
             //Custom DataService Class
             services.AddScoped<DataService>();
+            services.AddScoped<BlogSearchService>();
 
             //Register a preconfigured instance of the mail settings class
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
@@ -56,6 +57,7 @@ namespace HadesBlog
 
             //Register Slug Service
             services.AddScoped<ISlugService, SlugService>();
+
 
 
         }
