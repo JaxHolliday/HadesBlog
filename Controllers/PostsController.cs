@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using HadesBlog.Enums;
 using X.PagedList;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HadesBlog.Controllers
 {
@@ -51,6 +52,7 @@ namespace HadesBlog.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        [Authorize(Roles = "Administrator, Moderator")]
         //BlogPostsIndex
         public async Task<IActionResult> BlogPostIndex(int? id, int? page)
         {
@@ -107,6 +109,7 @@ namespace HadesBlog.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Administrator, Moderator")]
         // POST: Posts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -175,6 +178,7 @@ namespace HadesBlog.Controllers
             return View(post);
         }
 
+        [Authorize(Roles = "Administrator, Moderator")]
         // GET: Posts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -280,6 +284,7 @@ namespace HadesBlog.Controllers
             return View(post);
         }
 
+        [Authorize(Roles = "Administrator, Moderator")]
         // GET: Posts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

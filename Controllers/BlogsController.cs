@@ -53,7 +53,7 @@ namespace HadesBlog.Controllers
             return View(blog);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         // GET: Blogs/Create
         public IActionResult Create()
         {
@@ -83,6 +83,7 @@ namespace HadesBlog.Controllers
             return View(blog);
         }
 
+        [Authorize(Roles = "Administrator")]
         // GET: Blogs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -155,6 +156,7 @@ namespace HadesBlog.Controllers
             return View(blog);
         }
 
+        [Authorize(Roles = "Administrator")]
         // GET: Blogs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
