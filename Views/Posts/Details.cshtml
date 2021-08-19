@@ -39,3 +39,22 @@
 <hr />
 
 @* Displaying Comments Related to post then image of author *@
+<div>
+    @if (User.Identity.IsAuthenticated) 
+    { 
+        <form asp-action="Create" asp-controller="Comments" method="post">
+            @Html.Hidden("PostId", Model.Id)
+
+            <div class="form-group">
+                <label class="h2 custom-control-label font-weight-bold"></label>
+                <textarea name="body" class="form-control" rows="10"></textarea>
+            </div>
+            <button type="submit" class="btn btn-dark btn-block btn-sm">Submit</button>
+        </form>
+    }
+    else
+    {
+        <a class="btn btn-dark btn-sm btn-block" asp-area="Identity" asp-page="/Account/Login"> Login To Add Comments</a>
+    }
+
+</div>
