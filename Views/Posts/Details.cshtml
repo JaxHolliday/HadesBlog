@@ -1,5 +1,5 @@
 ﻿@using HadesBlog.Services
-@inject IImageService imageService 
+@inject IImageService imageService
 @model HadesBlog.Models.Post
 
 @{
@@ -27,7 +27,7 @@
     </div>
     <div class="row">
         <div class="col">
-            @foreach(var tag in Model.Tags)
+            @foreach (var tag in Model.Tags)
             {
                 <a class="btn btn-warning btn-sm btn-block btn-outline-dark" asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()">#@tag.Text</a>
             }
@@ -40,8 +40,8 @@
 
 @* Displaying Comments Related to post then image of author *@
 <div>
-    @if (User.Identity.IsAuthenticated) 
-    { 
+    @if (User.Identity.IsAuthenticated)
+    {
         <form asp-action="Create" asp-controller="Comments" method="post">
             @Html.Hidden("PostId", Model.Id)
 
@@ -71,6 +71,42 @@
             <h4>@comment.BlogUser.FullName</h4>
             <small><i>Posted on @comment.Created.ToString("MMM dd, yyyy")</i></small>
             <p>@comment.Body</p>
+
+            @if(comment.Moderated is null && comment.Deleted is null && comment.BlogUserId == userManager.GetUserId(User))
+                {
+                    <hr />
+                    <button data-toggle="modal" data-target="#editModal" class="btn-sm btn-dark float-right font-weight-bold">EDIT</button>
+                }
+
+        </div>
+    </div>
+
+    <!--Modal-->
+    <div id="modal" class="editModal">
+        <div class="moodal-dialog">         
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Editing Comment...</h4>
+
+                </div>
+
+                <div class="modal-body">
+                    <form asp-action="Edit" asp-controller="Comments">
+                        @Html.Hidden("Id", comment.Id)
+
+                        <div class="form-group">
+                            <textarea name="Body" class="form-control" required>@comment.Body</textarea>
+                        </div>
+
+                        <button class="btn-sm btn-dark border-success font-weight-bold" type="submit">SUBMIT</button>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-sm btn-dark font-weight-bold" data-dismiss="modal">CLOSE</button>
+                </div>
+
+            </div>
         </div>
     </div>
 }
