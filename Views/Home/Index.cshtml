@@ -1,7 +1,13 @@
 ﻿@using HadesBlog.Models
+@using HadesBlog.Services
+@using HadesBlog.Enums
+@using Microsoft.AspNetCore.Identity
 @using X.PagedList
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
+
+@inject IImageService _imageService
+@inject UserManager<BlogUser> _userManager
 
 @model IPagedList<Blog>
 

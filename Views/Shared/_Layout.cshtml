@@ -20,6 +20,9 @@
     @* Summernote *@
     <link href="~/css/summernote-lite.min.css" rel="stylesheet" />
 
+    @* Datatables *@
+    <link href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
+
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="~/css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -132,6 +135,19 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
-
+    @* Datatables *@
+    <script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#pstTable').DataTable({
+                scrollY: '100vh',
+                scrollX: true,
+                scrollCollapse: true,
+                //paging: true,
+                //"pagingType": "full_numbers",
+                responsive: true
+            });
+        });
+    </script>
 </body>
 </html>

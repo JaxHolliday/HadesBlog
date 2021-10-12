@@ -16,7 +16,7 @@
 <p>
     <a asp-action="Create">Create New Post</a>
 </p>
-<table class="table">
+<table class="table" id="pstTable">
     <thead>
         <tr>
             <th>
@@ -67,7 +67,7 @@
 </div>
 
 <div class="row">
-    <div class="col d-flex justify-content-end mb-4">                                    @* Passing blog ID and page *@                   
+    <div class="col d-flex justify-content-end mb-4">                                     Passing blog ID and page                    
         @Html.PagedListPager(Model, page => Url.Action("BlogPostIndex", new { id = Model.FirstOrDefault().BlogId, page = page }),
          new PagedListRenderOptionsBase
          {
