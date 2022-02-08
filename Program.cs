@@ -15,7 +15,7 @@ namespace HadesBlog
     {
         public static async Task Main(string[] args)
         {
-            //CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Run();
             var host = CreateHostBuilder(args).Build();
 
             //Pull out my registered Dataservice
